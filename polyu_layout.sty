@@ -1,7 +1,7 @@
 % PolyU Beamer visual layer (brand tab, title page, cards, paired images, page numbers)
 % Load after: \usepackage[polyu,en]{collegeBeamer}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{polyu_layout}[2026/11/16 PolyU Beamer layout helpers]
+\ProvidesPackage{polyu_layout}[2026/11/19 PolyU Beamer layout helpers]
 
 \RequirePackage{tikz}
 \RequirePackage{booktabs}
@@ -18,8 +18,9 @@
 \newcommand{\logotabh}{1.55cm}
 \newcommand{\logoemblem}{0.84cm}
 \newcommand{\titleleftskip}{1.18cm}
-% Path to title-page hero (south-east, bottom-glued). Override in the preamble if needed.
+% Title-page hero (south-east, bottom-glued). Override path / height in the preamble.
 \newcommand{\titleheropath}{gallery/title_hero.png}
+\newcommand{\titleheroheight}{0.68\paperheight}
 
 \setbeamertemplate{headline}{%
   \begin{tikzpicture}[remember picture,overlay]
@@ -74,10 +75,9 @@
             {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor}\\[2pt]
             {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate}%
           };
-        % Same visual scale as original full-bleed bg (building ≈0.68 of slide height)
         \node[anchor=south east, inner sep=0pt]
           at (current page.south east)
-          {\includegraphics[height=0.68\paperheight,keepaspectratio]{\titleheropath}};
+          {\includegraphics[height=\titleheroheight,keepaspectratio]{\titleheropath}};
       \end{tikzpicture}%
     \end{frame}%
   \endgroup
@@ -120,13 +120,13 @@
   \end{minipage}%
 }
 
-% --- Cards -------------------------------------------------------------------
+% --- Cards (padding tuned to program deck) -----------------------------------
 \newcommand{\drawcard}[3]{%
   \begin{tikzpicture}[baseline=(frame.north)]
     \node[anchor=north west, text width=\dimexpr#3-10pt\relax, align=center,
       font=\bfseries\small\sffamily, inner xsep=5pt, inner ysep=4pt] (T) at (0,0) {#1};
     \node[anchor=north west, text width=\dimexpr#3-10pt\relax, align=left,
-      font=\scriptsize, inner xsep=5pt, inner ysep=5pt] (B) at (0,0|-T.south) {#2};
+      font=\scriptsize, inner xsep=5pt, inner ysep=8pt] (B) at (0,0|-T.south) {#2};
     \fill[white, rounded corners=5pt] (0,0) rectangle (#3,0|-B.south);
     \begin{scope}
       \clip (-1pt,1pt) rectangle (#3+1pt,0|-T.south);
@@ -136,7 +136,7 @@
       font=\bfseries\small\sffamily, text=white, inner xsep=5pt, inner ysep=4pt]
       at (0,0) {#1};
     \node[anchor=north west, text width=\dimexpr#3-10pt\relax, align=left,
-      font=\scriptsize, text=black, inner xsep=5pt, inner ysep=5pt]
+      font=\scriptsize, text=black, inner xsep=5pt, inner ysep=8pt]
       at (0,0|-T.south) {#2};
     \draw[maincolor, line width=0.9pt, rounded corners=5pt]
       (0,0) rectangle (#3,0|-B.south);
@@ -147,13 +147,15 @@
 }
 
 \newlength{\drawcardswidth}
+\newlength{\sketchbodyw}
 \newcommand{\drawcards}[3]{%
+  % Capture width before tikz (inside tikz, \linewidth is the page width)
   \setlength{\drawcardswidth}{#3}%
   \begin{tikzpicture}[baseline=(frame.north)]
-    \node[anchor=north west, text width=\dimexpr\drawcardswidth-8pt\relax, align=center,
-      font=\bfseries\small\sffamily, inner xsep=4pt, inner ysep=3pt] (T) at (0,0) {#1};
-    \node[anchor=north west, text width=\dimexpr\drawcardswidth-8pt\relax, align=left,
-      font=\small, inner xsep=4pt, inner ysep=3.5pt]
+    \node[anchor=north west, text width=\dimexpr\drawcardswidth-14pt\relax, align=center,
+      font=\bfseries\small\sffamily, inner xsep=7pt, inner ysep=3pt] (T) at (0,0) {#1};
+    \node[anchor=north west, text width=\dimexpr\drawcardswidth-14pt\relax, align=left,
+      font=\small, inner xsep=7pt, inner ysep=3.5pt]
       (B) at (0,0|-T.south) {#2};
     \fill[white, rounded corners=4pt]
       (0,0) rectangle (\drawcardswidth,0|-B.south);
@@ -162,17 +164,63 @@
       \fill[maincolor, rounded corners=4pt]
         (0,0) rectangle (\drawcardswidth,0|-B.south);
     \end{scope}
-    \node[anchor=north west, text width=\dimexpr\drawcardswidth-8pt\relax, align=center,
-      font=\bfseries\small\sffamily, text=white, inner xsep=4pt, inner ysep=3pt]
+    \node[anchor=north west, text width=\dimexpr\drawcardswidth-14pt\relax, align=center,
+      font=\bfseries\small\sffamily, text=white, inner xsep=7pt, inner ysep=3pt]
       at (0,0) {#1};
-    \node[anchor=north west, text width=\dimexpr\drawcardswidth-8pt\relax, align=left,
-      font=\small, text=black, inner xsep=4pt, inner ysep=3.5pt]
+    \node[anchor=north west, text width=\dimexpr\drawcardswidth-14pt\relax, align=left,
+      font=\small, text=black, inner xsep=7pt, inner ysep=3.5pt]
       at (0,0|-T.south) {#2};
     \draw[maincolor, line width=0.8pt, rounded corners=4pt]
       (0,0) rectangle (\drawcardswidth,0|-B.south);
     \draw[maincolor, line width=0.5pt]
       (1pt,0|-T.south) -- (\drawcardswidth-1pt,0|-T.south);
     \node[fit={(0,0) (\drawcardswidth,0|-B.south)}, inner sep=0] (frame) {};
+  \end{tikzpicture}%
+}
+
+% Labeled 2-col grid inside a Session sketch card
+% \sessionsketch{design}{conditions}{procedure}{measures}
+\newcommand{\sessionsketch}[4]{%
+  \setlength{\sketchbodyw}{\dimexpr\linewidth-2.95cm\relax}%
+  \drawcards{Session sketch}{%
+    \scriptsize
+    \renewcommand{\arraystretch}{1.28}%
+    \begin{tabular}{@{}
+      >{\bfseries\sffamily\color{maincolor}}l
+      @{\hspace{0.95em}}
+      >{\raggedright\arraybackslash}p{\sketchbodyw}
+      @{}
+    }
+      Design & #1 \\[0.14em]
+      Conditions & #2 \\[0.14em]
+      Procedure & #3 \\[0.14em]
+      Measures & #4 \\
+    \end{tabular}%
+  }{\linewidth}%
+}
+
+% Numbered roadmap strips (maroon index cell + text)
+% Usage: \roadmaprows{0/{Step zero text.}, 1/{Step one text.}, 2/{Step two text.}}
+\newcommand{\roadmaprows}[1]{%
+  \centering
+  \begin{tikzpicture}
+    \foreach \n/\txt [count=\i from 0] in {#1}{%
+      \pgfmathsetmacro{\rowy}{-\i*1.18}%
+      \fill[white, rounded corners=4pt] (0,\rowy) rectangle (11.95,\rowy-1.02);
+      \begin{scope}
+        \clip (-0.1,\rowy+0.05) rectangle (0.95,\rowy-1.07);
+        \fill[maincolor, rounded corners=4pt] (0,\rowy) rectangle (11.95,\rowy-1.02);
+      \end{scope}
+      \draw[maincolor, line width=0.85pt, rounded corners=4pt]
+        (0,\rowy) rectangle (11.95,\rowy-1.02);
+      \draw[maincolor, line width=0.55pt]
+        (0.95,\rowy-0.06) -- (0.95,\rowy-0.96);
+      \node[text=white, font=\bfseries\small\sffamily]
+        at (0.475,\rowy-0.51) {\n};
+      \node[anchor=west, font=\footnotesize, text width=10.5cm,
+        align=left, inner xsep=5pt]
+        at (0.95,\rowy-0.51) {\txt};
+    }%
   \end{tikzpicture}%
 }
 

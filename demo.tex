@@ -155,14 +155,21 @@
   }
 \end{frame}
 
-\begin{frame}[shrink=8]{Text + image (matched height)}
+\begin{frame}[shrink=10]{Text + session sketch + image}
   \studypair{%
       \small
       \textbf{Lead-in:} short framing sentence for the block on the left.
 
-      \vspace{0.4em}
+      \vspace{0.28em}
+      \sessionsketch
+        {Within-subject crossover · washout placeholder}
+        {Condition A vs Condition B, matched dose}
+        {Stimulus $\rightarrow$ delay $\rightarrow$ outcome window}
+        {Primary measure, secondary measure, covariate}
+
+      \vspace{0.28em}
       \plaintable{%
-        \renewcommand{\arraystretch}{1.05}
+        \renewcommand{\arraystretch}{1.02}
         \begin{tabularx}{\linewidth}{@{}lX@{}}
           \toprule
           Label & Detail \\
@@ -173,18 +180,17 @@
           \bottomrule
         \end{tabularx}%
       }
-
-      \vspace{0.35em}
-      One-line note under the table.
-
-      \vspace{0.4em}
-      \drawcards{Callout}{%
-        Line one of supporting detail\\[0.05em]
-        Line two of supporting detail\\[0.05em]
-        Line three of supporting detail\\[0.05em]
-        Line four of supporting detail%
-      }{\linewidth}%
   }{gallery/paired_fill.jpg}
+\end{frame}
+
+\begin{frame}{Roadmap strips}
+  \roadmaprows{
+    0/{\textbf{Align} \quad Decide scope and first deliverable.},
+    1/{\textbf{Gather} \quad Collect low-cost data and references.},
+    2/{\textbf{Pilot} \quad Run a small controlled check ($N\sim$12--20).},
+    3/{\textbf{Scale} \quad Repeat the same protocol with a larger audience.},
+    4/{\textbf{Write} \quad Draft findings (one paper or separate notes).}
+  }
 \end{frame}
 
 \begin{frame}[shrink=5]{Text + small image}
